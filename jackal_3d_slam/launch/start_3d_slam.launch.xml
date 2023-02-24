@@ -1,0 +1,8 @@
+<launch>
+    <include file="$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP16-launch.py"/>
+    <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py">
+        <arg name="use_sim_time" value="True"/>
+    </include>
+    <include file="$(find-pkg-share nav2_bringup)/launch/rviz_launch.py"/>
+    <include file="$(find-pkg-share jackal_robot)/launch/bringup.launch.py"/>
+</launch>

@@ -1,0 +1,3 @@
+<launch>
+    <include file="$(find-pkg-share jackal_gazebo)/launch/gazebo.launch.py"/>
+</launch>
