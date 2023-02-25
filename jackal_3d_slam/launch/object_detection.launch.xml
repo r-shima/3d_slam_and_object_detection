@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="jackal_3d_slam" exec="object_detection.py" name="object_detection"/>
+</launch>

@@ -31,7 +31,7 @@ class ObjectDetection(Node):
         self.device = self.get_parameter("device").get_parameter_value().string_value
         self.img_size = self.get_parameter("img_size").get_parameter_value().integer_value
 
-        self.frequency = 1000  # Hz
+        self.frequency = 1000 # Hz
         self.timer = self.create_timer(1/self.frequency, self.timer_callback)
 
         # Initialize
