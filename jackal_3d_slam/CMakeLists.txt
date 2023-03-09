@@ -8,9 +8,47 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 find_package(rclpy REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(pcl_conversions REQUIRED)
+find_package(PCL 1.12 REQUIRED)
+
+add_executable(filter src/pointcloud_processing.cpp)
+
+include_directories(include ${PCL_INCLUDE_DIRS})
+
+link_directories(${PCL_LIBRARY_DIRS})
+
+add_definitions(${PCL_DEFINITIONS})
+
+target_link_libraries(filter ${PCL_LIBRARIES})
+
+ament_export_include_directories(include)
+
+ament_target_dependencies(filter
+  rclcpp
+  sensor_msgs
+  pcl_conversions
+)
+
+install(TARGETS
+  filter
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(
-  DIRECTORY scripts src jackal_3d_slam launch
+  DIRECTORY
+  models
+  utils
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY
+  scripts
+  src
+  jackal_3d_slam
+  launch
   DESTINATION share/${PROJECT_NAME}
 )
  
