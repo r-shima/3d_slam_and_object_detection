@@ -26,7 +26,23 @@ public:
   PointcloudProcessing()
   : Node("pointcloud_processing")
   {
-    // Initializes variables for the rate, publisher, subscriber, and timer
+    // Initializes variables for the parameters, rate, publisher, subscriber, and timer
+    declare_parameter("x_filter_min", -0.5);
+    declare_parameter("x_filter_max", 0.0);
+    declare_parameter("z_filter_min", -0.26);
+    declare_parameter("z_filter_max", 0.13);
+    declare_parameter("search_radius", 0.8);
+    declare_parameter("num_neighbors", 2);
+    declare_parameter("voxel_leaf_size", 0.01);
+
+    x_filter_min_ = get_parameter("x_filter_min").get_parameter_value().get<double>();
+    x_filter_max_ = get_parameter("x_filter_max").get_parameter_value().get<double>();
+    z_filter_min_ = get_parameter("z_filter_min").get_parameter_value().get<double>();
+    z_filter_max_ = get_parameter("z_filter_max").get_parameter_value().get<double>();
+    search_radius_ = get_parameter("search_radius").get_parameter_value().get<double>();
+    num_neighbors_ = get_parameter("num_neighbors").get_parameter_value().get<int>();
+    voxel_leaf_size_ = float(get_parameter("voxel_leaf_size").get_parameter_value().get<double>());
+
     rate_ = 200;
     filtered_points_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>("/filtered_velodyne_points", 10);
     velodyne_points_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
@@ -61,29 +77,30 @@ private:
     pcl::toROSMsg(*pcl_cloud_, cloud_);
   }
 
-  /// \brief Filter the data using PassThrough, RadiusOutlierRemoval, and VoxelGrid
+  /// \brief Filters the pointcloud data using PassThrough, RadiusOutlierRemoval, and VoxelGrid
+  /// filters
   ///
   /// \param cloud_in - the pointcloud data to filter
   /// \return the filtered pointcloud data
   pcl::PointCloud<pcl::PointXYZI>::Ptr filter(pcl::PointCloud<pcl::PointXYZI>::Ptr & cloud_in)
   {
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_out{new pcl::PointCloud<pcl::PointXYZI>()};
-    pcl::PassThrough<pcl::PointXYZI> z_data, x_data;
+    pcl::PassThrough<pcl::PointXYZI> pt1, pt2;
     pcl::RadiusOutlierRemoval<pcl::PointXYZI> rad_outlier;
     pcl::VoxelGrid<pcl::PointXYZI> voxel_grid;
 
-    // Filter in z direction
-    z_data.setInputCloud(cloud_in);
-    z_data.setFilterFieldName("z");
-    z_data.setFilterLimits(-0.26, 0.13);
-    z_data.filter(*cloud_out);
+    // Filter the data along z
+    pt1.setInputCloud(cloud_in);
+    pt1.setFilterFieldName("z");
+    pt1.setFilterLimits(-0.26, 0.13);
+    pt1.filter(*cloud_out);
 
-    // Filter in x direction
-    x_data.setInputCloud(cloud_out);
-    x_data.setFilterFieldName("x");
-    x_data.setFilterLimits(-0.5, 0.0);
-    x_data.setNegative(true);
-    x_data.filter(*cloud_out);
+    // Filter the data along x
+    pt2.setInputCloud(cloud_out);
+    pt2.setFilterFieldName("x");
+    pt2.setFilterLimits(-0.5, 0.0);
+    pt2.setNegative(true);
+    pt2.filter(*cloud_out);
 
     // Remove outliers
     rad_outlier.setInputCloud(cloud_out);
@@ -113,6 +130,13 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr velodyne_points_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
 
+  double x_filter_min_;
+  double x_filter_max_;
+  double z_filter_min_;
+  double z_filter_max_;
+  double search_radius_;
+  int num_neighbors_;
+  float voxel_leaf_size_;
   int rate_;
   // pcl::PCLPointCloud2::Ptr pcl_cloud2_{new pcl::PCLPointCloud2()};
   // pcl::PCLPointCloud2::Ptr pcl_cloud2_conv_{new pcl::PCLPointCloud2()};

@@ -1,20 +1,9 @@
-# Example:
-#   $ ros2 launch velodyne_driver velodyne_driver_node-VLP16-launch.py
-#   $ ros2 launch velodyne_pointcloud velodyne_transform_node-VLP16-launch.py
-#
-#   SLAM:
-#   $ ros2 launch rtabmap_ros vlp16.launch.py
-
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
-
-    use_sim_time = LaunchConfiguration('use_sim_time')
-    deskewing = LaunchConfiguration('deskewing')
     
     return LaunchDescription([
 
@@ -31,12 +20,12 @@ def generate_launch_description():
         Node(
             package='rtabmap_ros', executable='icp_odometry', output='screen',
             parameters=[{
-              'frame_id':'velodyne',
+              'frame_id':'base_link',
               'odom_frame_id':'odom',
-              'wait_for_transform':0.2,
+              'wait_for_transform':0.3, # 0.2
               'expected_update_rate':15.0,
-              'deskewing':deskewing,
-              'use_sim_time':use_sim_time,
+              'deskewing':LaunchConfiguration('deskewing'),
+              'use_sim_time':LaunchConfiguration('use_sim_time'),
             }],
             remappings=[
               ('scan_cloud', '/velodyne_points')
@@ -64,7 +53,7 @@ def generate_launch_description():
             parameters=[{
               'max_clouds':10,
               'fixed_frame_id':'',
-              'use_sim_time':use_sim_time,
+              'use_sim_time':LaunchConfiguration('use_sim_time'),
             }],
             remappings=[
               ('cloud', 'odom_filtered_input_scan')
@@ -77,9 +66,9 @@ def generate_launch_description():
               'subscribe_depth':False,
               'subscribe_rgb':False,
               'subscribe_scan_cloud':True,
-              'approx_sync':False,
-              'wait_for_transform':0.2,
-              'use_sim_time':use_sim_time,
+              'approx_sync':True, # False
+              'wait_for_transform':0.3, # 0.2
+              'use_sim_time':LaunchConfiguration('use_sim_time'),
             }],
             remappings=[
               ('scan_cloud', 'assembled_cloud')
@@ -115,8 +104,8 @@ def generate_launch_description():
               'odom_frame_id':'odom',
               'subscribe_odom_info':True,
               'subscribe_scan_cloud':True,
-              'approx_sync':False,
-              'use_sim_time':use_sim_time,
+              'approx_sync':True, # False
+              'use_sim_time':LaunchConfiguration('use_sim_time'),
             }],
             remappings=[
                ('scan_cloud', 'odom_filtered_input_scan')

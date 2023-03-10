@@ -49,6 +49,7 @@ install(
   src
   jackal_3d_slam
   launch
+  config
   DESTINATION share/${PROJECT_NAME}
 )
  
