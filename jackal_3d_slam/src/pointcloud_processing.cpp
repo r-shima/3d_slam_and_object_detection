@@ -1,10 +1,20 @@
 /// \file
 /// \brief This node removes and downsamples noisy pointcloud data
 ///
+/// PARAMETERS:
+///     x_filter_min (double): the minimum value for the PassThrough filter limit in the x direction
+///     x_filter_max (double): the maximum value for the PassThrough filter limit in the x direction
+///     z_filter_min (double): the minimum value for the PassThrough filter limit in the z direction
+///     z_filter_max (double): the maximum value for the PassThrough filter limit in the z direction
+///     search_radius (double): the sphere radius used for finding the k-nearest neighbors for the
+///                             RadiusOutlierRemoval filter
+///     num_neighbors (int): the minimum number of neighbors that a point needs to have for the
+///                          RadiusOutlierRemoval filter
+///     voxel_leaf_size (float): the leaf size for the VoxelGrid filter
 /// PUBLISHES:
-///     /filtered_velodyne_points (sensor_msgs::msg::PointCloud2): filtered pointcloud data
+///     /filtered_velodyne_points (sensor_msgs::msg::PointCloud2): the filtered pointcloud data
 /// SUBSCRIBES:
-///     /velodyne_points (sensor_msgs::msg::PointCloud2): Pointcloud data from the Velodyne
+///     /velodyne_points (sensor_msgs::msg::PointCloud2): the pointcloud data from the Velodyne
 
 #include <chrono>
 #include <functional>
@@ -44,7 +54,8 @@ public:
     voxel_leaf_size_ = float(get_parameter("voxel_leaf_size").get_parameter_value().get<double>());
 
     rate_ = 200;
-    filtered_points_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>("/filtered_velodyne_points", 10);
+    filtered_points_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>(
+      "/filtered_velodyne_points", 10);
     velodyne_points_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
       "/velodyne_points", 10, std::bind(
         &PointcloudProcessing::velodyne_points_callback, this,
@@ -67,7 +78,7 @@ private:
 
     // // Convert PCL PointCloud2 to PointCloud<PointXYZI>
     // pcl::fromPCLPointCloud2(*pcl_cloud2_, *pcl_cloud_);
-    
+
     pcl_cloud_ = filter(pcl_cloud_);
 
     // // Convert PointCloud<PointXYZI> to PCL PointCloud2

@@ -1,4 +1,0 @@
-<launch>
-    <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py"/>
-    <include file="$(find-pkg-share jackal_robot)/launch/bringup.launch.py"/>
-</launch>
