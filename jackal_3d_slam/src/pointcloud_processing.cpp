@@ -92,25 +92,25 @@ private:
     // Filter the data along z
     pt1.setInputCloud(cloud_in);
     pt1.setFilterFieldName("z");
-    pt1.setFilterLimits(-0.26, 0.13);
+    pt1.setFilterLimits(z_filter_min_, z_filter_max_);
     pt1.filter(*cloud_out);
 
     // Filter the data along x
     pt2.setInputCloud(cloud_out);
     pt2.setFilterFieldName("x");
-    pt2.setFilterLimits(-0.5, 0.0);
+    pt2.setFilterLimits(x_filter_min_, x_filter_max_);
     pt2.setNegative(true);
     pt2.filter(*cloud_out);
 
     // Remove outliers
     rad_outlier.setInputCloud(cloud_out);
-    rad_outlier.setRadiusSearch(0.8);
-    rad_outlier.setMinNeighborsInRadius(2);
+    rad_outlier.setRadiusSearch(search_radius_);
+    rad_outlier.setMinNeighborsInRadius(num_neighbors_);
     rad_outlier.filter(*cloud_out);
 
     // Downsample the data
     voxel_grid.setInputCloud(cloud_out);
-    voxel_grid.setLeafSize(0.01f, 0.01f, 0.01f);
+    voxel_grid.setLeafSize(voxel_leaf_size_, voxel_leaf_size_, voxel_leaf_size_);
     voxel_grid.filter(*cloud_out);
 
     return cloud_out;
@@ -130,14 +130,9 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr velodyne_points_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
 
-  double x_filter_min_;
-  double x_filter_max_;
-  double z_filter_min_;
-  double z_filter_max_;
-  double search_radius_;
-  int num_neighbors_;
+  double x_filter_min_, x_filter_max_, z_filter_min_, z_filter_max_, search_radius_;
+  int num_neighbors_, rate_;
   float voxel_leaf_size_;
-  int rate_;
   // pcl::PCLPointCloud2::Ptr pcl_cloud2_{new pcl::PCLPointCloud2()};
   // pcl::PCLPointCloud2::Ptr pcl_cloud2_conv_{new pcl::PCLPointCloud2()};
   pcl::PointCloud<pcl::PointXYZI>::Ptr pcl_cloud_{new pcl::PointCloud<pcl::PointXYZI>()};
