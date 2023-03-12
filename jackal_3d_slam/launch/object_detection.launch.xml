@@ -1,3 +1,16 @@
 <launch>
     <node pkg="jackal_3d_slam" exec="object_detection.py" name="object_detection"/>
+
+    <include file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
+      <arg name="enable_depth" value="true" />
+      <arg name="align_depth.enable" value="true" />
+      <arg name="enable_color" value="true" />
+      <arg name="enable_fisheye1" value="false" />
+      <arg name="enable_fisheye2" value="false" />
+      <arg name="colorizer.enable" value="false" />
+      <arg name="clip_distance" value="10.0" />
+      <arg name="tf_publish_rate" value="0.0" />
+      <arg name="depth_module.profile" value="640x480x30" />
+      <arg name="rgb_camera.profile" value="640x480x30" />
+    </include>
 </launch>
