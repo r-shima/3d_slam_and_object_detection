@@ -1,5 +1,0 @@
-<launch>
-     <node pkg="jackal_3d_slam" exec="filter" name="filter">
-        <param from="$(find-pkg-share jackal_3d_slam)/config/filter_params.yaml"/>
-    </node>
-</launch>

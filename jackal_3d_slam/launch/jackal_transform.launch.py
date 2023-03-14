@@ -17,6 +17,20 @@ def generate_launch_description():
             description='Publish a static transform between base_link and velodyne'
         ),
 
+        DeclareLaunchArgument(
+            name='use_unfiltered',
+            default_value='false',
+            choices=['true','false'],
+            description='Launch rtabmap with unfiltered point cloud'
+        ),
+
+        DeclareLaunchArgument(
+            name='use_filtered',
+            default_value='false',
+            choices=['true','false'],
+            description='Launch rtabmap with filtered point cloud'
+        ),
+
         Node(
             package="tf2_ros",  
             executable="static_transform_publisher",
@@ -31,6 +45,18 @@ def generate_launch_description():
                     'launch',
                     'velodyne.launch.py'
                 ])
-            )
+            ),
+            condition=IfCondition(LaunchConfiguration('use_unfiltered'))
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution([
+                    FindPackageShare('jackal_3d_slam'),
+                    'launch',
+                    'filtered_velodyne.launch.py'
+                ])
+            ),
+            condition=IfCondition(LaunchConfiguration('use_filtered'))
         )
     ])

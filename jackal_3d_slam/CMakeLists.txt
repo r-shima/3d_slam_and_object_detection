@@ -13,7 +13,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(PCL 1.12 REQUIRED)
 
-add_executable(filter src/pointcloud_processing.cpp)
+add_executable(filter src/point_cloud_processing.cpp)
 
 include_directories(include ${PCL_INCLUDE_DIRS})
 

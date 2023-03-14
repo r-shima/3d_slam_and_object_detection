@@ -1,5 +1,5 @@
 /// \file
-/// \brief This node removes and downsamples noisy pointcloud data
+/// \brief This node removes and downsamples noisy point cloud data
 ///
 /// PARAMETERS:
 ///     x_filter_min (double): the minimum value for the PassThrough filter limit in the x direction
@@ -12,9 +12,9 @@
 ///                          RadiusOutlierRemoval filter
 ///     voxel_leaf_size (float): the leaf size for the VoxelGrid filter
 /// PUBLISHES:
-///     /filtered_velodyne_points (sensor_msgs::msg::PointCloud2): the filtered pointcloud data
+///     /filtered_velodyne_points (sensor_msgs::msg::PointCloud2): the filtered point cloud data
 /// SUBSCRIBES:
-///     /velodyne_points (sensor_msgs::msg::PointCloud2): the pointcloud data from the Velodyne
+///     /velodyne_points (sensor_msgs::msg::PointCloud2): the point cloud data from the Velodyne
 
 #include <chrono>
 #include <functional>
@@ -29,12 +29,12 @@
 #include <pcl/filters/radius_outlier_removal.h>
 #include <pcl/filters/voxel_grid.h>
 
-/// \brief Performs pointcloud filtering
-class PointcloudProcessing : public rclcpp::Node
+/// \brief Performs point cloud filtering
+class PointCloudProcessing : public rclcpp::Node
 {
 public:
-  PointcloudProcessing()
-  : Node("pointcloud_processing")
+  PointCloudProcessing()
+  : Node("point_cloud_processing")
   {
     // Initializes variables for the parameters, rate, publisher, subscriber, and timer
     declare_parameter("x_filter_min", -0.5);
@@ -58,16 +58,16 @@ public:
       "/filtered_velodyne_points", 10);
     velodyne_points_sub_ = create_subscription<sensor_msgs::msg::PointCloud2>(
       "/velodyne_points", 10, std::bind(
-        &PointcloudProcessing::velodyne_points_callback, this,
+        &PointCloudProcessing::velodyne_points_callback, this,
         std::placeholders::_1));
     timer_ = create_wall_timer(
       std::chrono::milliseconds(1000 / rate_),
-      std::bind(&PointcloudProcessing::timer_callback, this));
+      std::bind(&PointCloudProcessing::timer_callback, this));
   }
 
 private:
   /// \brief Callback function for the subscriber that subscribes to sensor_msgs/msg/PointCloud2.
-  /// Filters the pointcloud data.
+  /// Filters the point cloud data.
   ///
   /// \param msg - PointCloud2 object
   /// \returns none
@@ -88,11 +88,11 @@ private:
     pcl::toROSMsg(*pcl_cloud_, cloud_);
   }
 
-  /// \brief Filters the pointcloud data using PassThrough, RadiusOutlierRemoval, and VoxelGrid
+  /// \brief Filters the point cloud data using PassThrough, RadiusOutlierRemoval, and VoxelGrid
   /// filters
   ///
-  /// \param cloud_in - the pointcloud data to filter
-  /// \return the filtered pointcloud data
+  /// \param cloud_in - the point cloud data to filter
+  /// \return the filtered point cloud data
   pcl::PointCloud<pcl::PointXYZI>::Ptr filter(pcl::PointCloud<pcl::PointXYZI>::Ptr & cloud_in)
   {
     pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_out{new pcl::PointCloud<pcl::PointXYZI>()};
@@ -127,7 +127,7 @@ private:
     return cloud_out;
   }
 
-  /// \brief Callback function for the timer. Publishes filtered pointcloud data.
+  /// \brief Callback function for the timer. Publishes filtered point cloud data.
   ///
   /// \param none
   /// \returns none
@@ -154,7 +154,7 @@ private:
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<PointcloudProcessing>());
+  rclcpp::spin(std::make_shared<PointCloudProcessing>());
   rclcpp::shutdown();
   return 0;
 }

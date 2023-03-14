@@ -1,4 +1,10 @@
 <launch>
+    <arg name="filter" default="false" description="Determines whether or not to filter the point cloud"/>
+    
+    <node pkg="jackal_3d_slam" exec="filter" name="filter" if="$(eval '\'$(var filter)\' == \'true\'')">
+        <param from="$(find-pkg-share jackal_3d_slam)/config/filter_params.yaml"/>
+    </node>
+
     <include file="$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP16-launch.py"/>
     <include file="$(find-pkg-share jackal_robot)/launch/bringup.launch.py"/>
     <include file="$(find-pkg-share jackal_3d_slam)/launch/jackal_nav.launch.py"/>
