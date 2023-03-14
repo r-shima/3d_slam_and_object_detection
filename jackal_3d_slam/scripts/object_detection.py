@@ -3,7 +3,6 @@
 import rclpy
 from rclpy.node import Node
 from rcl_interfaces.msg import ParameterDescriptor
-from geometry_msgs.msg import Point
 import cv2
 import torch
 import numpy as np
@@ -11,11 +10,9 @@ import pyrealsense2 as rs
 from sensor_msgs.msg import Image, CompressedImage, CameraInfo
 from cv_bridge import CvBridge
 from models.experimental import attempt_load
-from utils.general import check_img_size, non_max_suppression, scale_coords, \
-    strip_optimizer, set_logging, increment_path
+from utils.general import check_img_size, non_max_suppression, scale_coords, set_logging
 from utils.plots import plot_one_box
-from utils.torch_utils import select_device, load_classifier, time_synchronized,\
-    TracedModel
+from utils.torch_utils import select_device, time_synchronized
 
 
 class ObjectDetection(Node):
@@ -102,7 +99,7 @@ class ObjectDetection(Node):
         """
         Subscription to the depth camera topic.
         Args: data (sensor_msgs/msg/Image): Frames obtained from the
-                                                      /camera/aligned_depth_to_color/image_raw topic
+                                            /camera/aligned_depth_to_color/image_raw topic
         Returns: None
         """
         self.depth  = self.bridge.imgmsg_to_cv2(data)
@@ -120,8 +117,11 @@ class ObjectDetection(Node):
         self.camera_RGB = True
 
     def YOLOv7_detect(self):
-        """ Preform object detection with YOLOv7"""
-
+        """
+        Perform object detection with YOLOv7.
+        Args: None
+        Returns: None
+        """
         img = self.rgb_image
         im0 = img.copy()
         img = img[np.newaxis, :, :, :]
@@ -188,7 +188,6 @@ class ObjectDetection(Node):
 
                             if real_coords != [0.0,0.0,0.0]:
                                 depth_scale = 0.001
-                                # self.get_logger().info(f"depth_coord = {real_coords[0]*depth_scale}  {real_coords[1]*depth_scale}  {real_coords[2]*depth_scale}")
 
             cv2.imshow("YOLOv7 Result RGB", im0)
             cv2.imshow("YOLOv7 Result Depth", self.depth_color_map)
@@ -196,6 +195,11 @@ class ObjectDetection(Node):
                 break
 
     def timer_callback(self):
+        """
+        Run YOLOv7 object detection.
+        Args: None
+        Returns: None
+        """
         if self.camera_RGB == True:
             self.YOLOv7_detect()
 
