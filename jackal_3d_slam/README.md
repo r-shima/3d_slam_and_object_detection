@@ -1,5 +1,5 @@
 # jackal_3d_slam
-This package equips the Clearpath Jackal UGV with perception, localization, and mapping capabilities for navigation. Specifically, it utilizes RTAB-Map for 3D SLAM, Nav2 for autonomous navigation, and YOLOv7 for real-time object detection. In addition, it allows you to perform point cloud processing.
+This package implements 3D SLAM using RTAB-Map, autonomous navigation using Nav2, and real-time object detection using YOLOv7. In addition, it allows you to perform point cloud processing.
 ## Usage
 Before using this package, you must set up the Jackal on ROS2 Humble. Follow the instructions [here](https://github.com/r-shima/jackal_ros2_humble) to get the Jackal up and running.
 ## Executables
