@@ -76,13 +76,7 @@ private:
     // Convert ROS2 PointCloud2 to PointCloud<PointXYZI>
     pcl::fromROSMsg(msg, *pcl_cloud_);
 
-    // // Convert PCL PointCloud2 to PointCloud<PointXYZI>
-    // pcl::fromPCLPointCloud2(*pcl_cloud2_, *pcl_cloud_);
-
     pcl_cloud_ = filter(pcl_cloud_);
-
-    // // Convert PointCloud<PointXYZI> to PCL PointCloud2
-    // pcl::toPCLPointCloud2(*pcl_cloud_, *pcl_cloud2_conv_);
 
     // Convert PointCloud<PointXYZI> to ROS2 PointCloud2
     pcl::toROSMsg(*pcl_cloud_, cloud_);
@@ -144,8 +138,6 @@ private:
   double x_filter_min_, x_filter_max_, z_filter_min_, z_filter_max_, search_radius_;
   int num_neighbors_, rate_;
   float voxel_leaf_size_;
-  // pcl::PCLPointCloud2::Ptr pcl_cloud2_{new pcl::PCLPointCloud2()};
-  // pcl::PCLPointCloud2::Ptr pcl_cloud2_conv_{new pcl::PCLPointCloud2()};
   pcl::PointCloud<pcl::PointXYZI>::Ptr pcl_cloud_{new pcl::PointCloud<pcl::PointXYZI>()};
   sensor_msgs::msg::PointCloud2 cloud_;
 };

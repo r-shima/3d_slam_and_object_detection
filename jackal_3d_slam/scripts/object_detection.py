@@ -188,6 +188,7 @@ class ObjectDetection(Node):
 
                             if real_coords != [0.0,0.0,0.0]:
                                 depth_scale = 0.001
+                                self.get_logger().info(f"depth_coord = {real_coords[0]*depth_scale}  {real_coords[1]*depth_scale}  {real_coords[2]*depth_scale}")
 
             cv2.imshow("YOLOv7 Result RGB", im0)
             cv2.imshow("YOLOv7 Result Depth", self.depth_color_map)
