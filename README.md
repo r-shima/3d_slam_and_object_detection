@@ -19,6 +19,7 @@ Install with `sudo apt install`:
 * ros-humble-navigation2
 * ros-humble-nav2-bringup
 * ros-humble-perception-pcl
+
 Please refer to the next section for the dependencies related to the Jackal.
 ## Setting Up the Jackal on ROS2 Humble
 The additional part of this project was bringing the Jackal up to a running state on ROS2 Humble. The instructions are provided in a separate repository, which is available [here](https://github.com/r-shima/jackal_ros2_humble). Additional dependencies related to the Jackal are listed there.
