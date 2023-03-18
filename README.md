@@ -31,6 +31,4 @@ The additional part of this project was bringing the Jackal up to a running stat
 5. Open a new terminal on your computer, go to your workspace, source it, and run `ros2 launch nav2_bringup rviz_launch.py`. You should now be able to send goals to the Jackal on RViz.
 ## Demo
 
-[Alt-Text](https://user-images.githubusercontent.com/113070827/225349395-0dd1a5d8-b876-47b1-9f97-bb60d8b0e50d.mp4)
-
-The corresponding video of the Jackal navigating in the real world can be found [here](https://www.youtube.com/watch?v=7uk2VOqHJxs).
+[Alt-Text](https://user-images.githubusercontent.com/113070827/226080942-778ff475-c1bf-48ea-8ae5-8b23572f4e43.mp4)
