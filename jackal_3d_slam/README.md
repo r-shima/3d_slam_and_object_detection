@@ -1,7 +1,7 @@
 # jackal_3d_slam
 This package implements 3D SLAM using RTAB-Map, autonomous navigation using Nav2, and real-time object detection using YOLOv7. In addition, it allows you to perform point cloud processing.
 ## Usage
-Before using this package, you must set up the Jackal on ROS2 Humble. Follow the instructions [here](https://github.com/r-shima/jackal_ros2_humble) to get the Jackal up and running.
+Before using this package, you must set up the Jackal on ROS 2 Humble. Follow the instructions [here](https://github.com/r-shima/jackal_ros2_humble) to get the Jackal up and running.
 ## Executables
 * `filter`: This runs the `point_cloud_processing` node, which removes and downsamples noisy point cloud data using PassThrough, RadiusOutlierRemoval, and VoxelGrid filters. The node subscribes to `/velodyne_points` and publishes sensor_msgs/msg/PointCloud2 messages to `/filtered_velodyne_points`.
 * `object_detection.py`: This runs YOLOv7 to perform object detection. It is based on the code in a separate repository [here](https://github.com/r-shima/YOLOv7_ROS2/tree/rshima).
