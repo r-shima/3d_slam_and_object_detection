@@ -1,5 +1,5 @@
 # 3D SLAM and Object Detection for Jackal Navigation
-The goal of this project is to equip the Clearpath Jackal UGV with perception, localization, and mapping capabilities for navigation. For more details, please go to my [portfolio post](https://r-shima.github.io/jackal_3d_slam.html).
+The goal of this project is to equip the Clearpath Jackal UGV with perception, localization, and mapping capabilities for navigation. For more details, please go to my [portfolio post](https://r-shima.github.io/jackal-3d-slam/).
 ## Package
 [jackal_3d_slam](https://github.com/r-shima/3d_slam_and_object_detection/tree/main/jackal_3d_slam): This is a ROS 2 package that implements 3D SLAM using RTAB-Map, autonomous navigation using Nav2, and real-time object detection using YOLOv7 on the Clearpath Jackal UGV. It also implements point cloud processing.
 ## Hardware
